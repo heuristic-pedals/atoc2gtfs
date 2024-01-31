@@ -18,7 +18,7 @@ jobs:
       - name: Build Docs
         run: cargo doc --no-deps
       - name: Add index.html
-        run: echo "<meta http-equiv=\"refresh\" content=\"0; url=minigrep\">" > ./target/doc/index.html
+        run: echo "<meta http-equiv=\"refresh\" content=\"0; url=atoc2gtfs\">" > ./target/doc/index.html
       - name: Deploy Docs
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref ==  env.PUSH_BRANCH }}
