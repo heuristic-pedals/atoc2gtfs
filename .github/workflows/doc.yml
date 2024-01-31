@@ -1,0 +1,29 @@
+name: docs
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+  PUSH_BRANCH: "refs/heads/main"
+
+jobs:
+
+  docs:
+    name: Docs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docs
+        run: cargo doc --no-deps
+      - name: Add index.html
+        run: echo "<meta http-equiv=\"refresh\" content=\"0; url=minigrep\">" > ./target/doc/index.html
+      - name: Deploy Docs
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref ==  env.PUSH_BRANCH }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/doc/
+          force_orphan: true
+          commit_message: ${{ github.event.head_commit.message }}
