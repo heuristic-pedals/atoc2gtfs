@@ -11,7 +11,7 @@ pub struct Config<'a> {
 }
 
 impl<'a> Config<'a> {
-    pub fn build(parsed_args: &Vec<String>) -> Result<Config, String> {
+    pub fn build(parsed_args: &[String]) -> Result<Config, String> {
         let args: &Vec<String> = &parsed_args[1..].to_vec();
 
         const NUM_REQ_ARGS: usize = 2;
