@@ -12,9 +12,17 @@ pub struct Config<'a> {
 
 impl<'a> Config<'a> {
     pub fn build(parsed_args: &Vec<String>) -> Result<Config, String> {
-        match parsed_args.len().cmp(&3) {
-            Ordering::Greater => return Err("Too many argument provided.".to_string()),
-            Ordering::Less => return Err("Too few arguments provided".to_string()),
+        let args: &Vec<String> = &parsed_args[1..].to_vec();
+
+        const NUM_REQ_ARGS: usize = 2;
+        let num_inputted_req_args: usize = args.len();
+        let req_arg_err_msg: String = format!(
+            " required arguments provided. Expected {}, got {}.",
+            NUM_REQ_ARGS, num_inputted_req_args
+        );
+        match num_inputted_req_args.cmp(&NUM_REQ_ARGS) {
+            Ordering::Greater => return Err("Too many".to_string() + &req_arg_err_msg),
+            Ordering::Less => return Err("Too few".to_string() + &req_arg_err_msg),
             Ordering::Equal => (),
         }
 
