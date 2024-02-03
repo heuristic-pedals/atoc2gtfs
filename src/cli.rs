@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 /// Capture and collect the runtime configuration
 pub struct Config {
     /// path to the input file
@@ -8,10 +10,10 @@ pub struct Config {
 
 impl Config {
     pub fn build(parsed_args: &Vec<String>) -> Result<Config, &'static str> {
-        if parsed_args.len() < 3 {
-            return Err("Too few arguments provided.");
-        } else if parsed_args.len() > 3 {
-            return Err("Too many argument provided.");
+        match parsed_args.len().cmp(&3) {
+            Ordering::Greater => return Err("Too many argument provided."),
+            Ordering::Less => return Err("Too few arguments provided."),
+            Ordering::Equal => (),
         }
         let input_path: String = parsed_args[1].clone();
         let output_path: String = parsed_args[2].clone();
