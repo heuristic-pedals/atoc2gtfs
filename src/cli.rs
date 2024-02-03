@@ -12,10 +12,9 @@ pub struct Config<'a> {
 
 impl<'a> Config<'a> {
     pub fn build(parsed_args: &[String]) -> Result<Config, String> {
-        let args: &Vec<String> = &parsed_args[1..].to_vec();
 
         const NUM_REQ_ARGS: usize = 2;
-        let num_inputted_req_args: usize = args.len();
+        let num_inputted_req_args: usize = parsed_args.len() - 1;
         let req_arg_err_msg: String = format!(
             " required arguments provided. Expected {}, got {}.",
             NUM_REQ_ARGS, num_inputted_req_args
