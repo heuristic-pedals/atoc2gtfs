@@ -1,3 +1,4 @@
+//! Handles runtime command line parsing for the binary crate.
 use crate::utils;
 use std::cmp::Ordering;
 use std::path::Path;

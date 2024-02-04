@@ -1,3 +1,4 @@
+//! A set of utility methods related to inputs and outputs.
 use std::ffi::OsStr;
 use std::path::Path;
 
