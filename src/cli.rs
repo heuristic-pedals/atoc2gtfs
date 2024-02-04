@@ -1,5 +1,5 @@
+use crate::utils;
 use std::cmp::Ordering;
-use std::ffi::OsStr;
 use std::path::Path;
 
 /// Capture and collect the runtime configuration
@@ -34,27 +34,12 @@ impl<'a> Config<'a> {
             return Err(format!("{:?} is not a file.", input_path));
         }
 
-        Config::check_zip(input_path)?;
-        Config::check_zip(output_path)?;
+        utils::io::check_zip(input_path)?;
+        utils::io::check_zip(output_path)?;
 
         Ok(Config {
             input_path,
             output_path,
         })
-    }
-
-    fn check_zip(path: &Path) -> Result<(), String> {
-        const ACCEPT_ZIP_EXTS: [&str; 2] = ["zip", "ZIP"];
-
-        match path.extension().and_then(OsStr::to_str) {
-            Some(ext) => {
-                if !ACCEPT_ZIP_EXTS.contains(&ext) {
-                    return Err(format!("{:?} is not a zip file.", path));
-                }
-            }
-            None => return Err(format!("Unable to determine file extension for {:?}", path)),
-        };
-
-        Ok(())
     }
 }
