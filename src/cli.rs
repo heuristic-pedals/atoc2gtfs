@@ -109,7 +109,10 @@ mod tests {
             "dummy_output.zip".to_string(),
         ];
         let config = Config::build(&non_exist_input);
-        assert!(config.is_err(), "No error raised when provided non-existent input.");
+        assert!(
+            config.is_err(),
+            "No error raised when provided non-existent input."
+        );
         assert!(
             config.is_err_and(|err| err.contains("does not exist")),
             "Unexpected error message when passing a non-existent input."
@@ -124,7 +127,10 @@ mod tests {
             "dummy_output.zip".to_string(),
         ];
         let config = Config::build(&folder_input);
-        assert!(config.is_err(), "No error raised when provided a folder path as an input.");
+        assert!(
+            config.is_err(),
+            "No error raised when provided a folder path as an input."
+        );
         assert!(
             config.is_err_and(|err| err.contains("is not a file")),
             "Unexpected error message when passing a folder path as an input."
@@ -139,7 +145,10 @@ mod tests {
             "dummy_output.zip".to_string(),
         ];
         let config = Config::build(&text_input);
-        assert!(config.is_err(), "No error raised when provided a text file as input.");
+        assert!(
+            config.is_err(),
+            "No error raised when provided a text file as input."
+        );
     }
 
     #[test]
@@ -150,6 +159,9 @@ mod tests {
             "dummy_output.text".to_string(),
         ];
         let config = Config::build(&test_output);
-        assert!(config.is_err(), "No error raised when provided a text file as output.");
+        assert!(
+            config.is_err(),
+            "No error raised when provided a text file as output."
+        );
     }
 }
