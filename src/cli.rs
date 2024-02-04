@@ -74,4 +74,30 @@ mod tests {
             config.output_path
         );
     }
+
+    #[test]
+    fn config_too_many_req_args() {
+        let numerous_args = vec!["".to_string(); 4];
+        let config = Config::build(&numerous_args);
+        // split out assertions to imporve test debug messages
+        assert!(config.is_err(), "Too many arguments case was not detected.");
+        assert!(
+            // check equality since err message not expected to change
+            config.is_err_and(|err| err.contains("Too many required arguments provided")),
+            "Unexpected error message when passing too many arguments."
+        );
+    }
+
+    #[test]
+    fn config_too_few_req_args() {
+        let sparse_args = vec!["".to_string(); 2];
+        let config = Config::build(&sparse_args);
+        // split out assertions to imporve test debug messages
+        assert!(config.is_err(), "Too few arguments case was not detected.");
+        assert!(
+            // check equality since err message not expected to change
+            config.is_err_and(|err| err.contains("Too few required arguments provided")),
+            "Unexpected error message when passing too few arguments."
+        );
+    }
 }
