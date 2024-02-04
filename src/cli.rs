@@ -100,4 +100,56 @@ mod tests {
             "Unexpected error message when passing too few arguments."
         );
     }
+
+    #[test]
+    fn config_input_does_not_exist() {
+        let non_exist_input = vec![
+            "".to_string(),
+            "does_not_exist.zip".to_string(),
+            "dummy_output.zip".to_string(),
+        ];
+        let config = Config::build(&non_exist_input);
+        assert!(config.is_err(), "No error raised when provided non-existent input.");
+        assert!(
+            config.is_err_and(|err| err.contains("does not exist")),
+            "Unexpected error message when passing a non-existent input."
+        );
+    }
+
+    #[test]
+    fn config_input_not_a_file() {
+        let folder_input = vec![
+            "".to_string(),
+            "./tests/data/".to_string(),
+            "dummy_output.zip".to_string(),
+        ];
+        let config = Config::build(&folder_input);
+        assert!(config.is_err(), "No error raised when provided a folder path as an input.");
+        assert!(
+            config.is_err_and(|err| err.contains("is not a file")),
+            "Unexpected error message when passing a folder path as an input."
+        );
+    }
+
+    #[test]
+    fn config_input_not_a_zip() {
+        let text_input = vec![
+            "".to_string(),
+            "./tests/data/dummy_empty.txt".to_string(),
+            "dummy_output.zip".to_string(),
+        ];
+        let config = Config::build(&text_input);
+        assert!(config.is_err(), "No error raised when provided a text file as input.");
+    }
+
+    #[test]
+    fn config_output_not_a_zip() {
+        let test_output = vec![
+            "".to_string(),
+            "./tests/data/dummy_empty.zip".to_string(),
+            "dummy_output.text".to_string(),
+        ];
+        let config = Config::build(&test_output);
+        assert!(config.is_err(), "No error raised when provided a text file as output.");
+    }
 }
