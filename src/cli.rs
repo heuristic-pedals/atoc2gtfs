@@ -43,3 +43,32 @@ impl<'a> Config<'a> {
         })
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn config_build_on_pass() {
+        let dummy_input_path = "./tests/data/dummy_empty.zip";
+        let dummy_output_path = "dummy_output.zip";
+
+        let dummy_parsed_args = vec![
+            "".to_string(), dummy_input_path.to_string(), dummy_output_path.to_string(),
+        ];
+        let config = Config::build(&dummy_parsed_args);
+        assert!(config.is_ok());
+        let config = config.unwrap();
+        assert_eq!(
+            config.input_path.to_str().unwrap(), dummy_input_path,
+            "Unexpected `input_path` value {:?}",
+            config.input_path
+        );
+        assert_eq!(
+            config.output_path.to_str().unwrap(), dummy_output_path,
+            "Unexpected `file_path` value {:?}",
+            config.output_path
+        );
+    }
+}
