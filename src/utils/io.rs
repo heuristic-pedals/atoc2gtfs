@@ -1,6 +1,35 @@
 use std::ffi::OsStr;
 use std::path::Path;
 
+/// Checks if the provded input path is a zip file based on its extension.
+///
+/// Both `.zip` and `.ZIP` file exentions are considered zip files. Returns a
+/// `Result` enmum as follows:
+/// - `OK(())` when the provided path has a zip file extension.
+/// - `Er()` when no zip file extension is found. This could be due to the path
+/// having no file extension (say a directory) or it is not a zip file (say .txt).
+/// The `Er()` will contain a `String` error message with more details.
+///
+/// > Note: this function wraps [`std::path::Path::extension`]. See this method's
+/// documentation for more details.
+///
+/// # Arguments
+///
+/// * `path` - Path to input file to test.
+///
+/// # Example Usage
+/// ```
+/// use atoc2gtfs::utils::io;
+/// use std::path::Path;
+///
+/// // is a zip file
+/// let zip_example = Path::new("example.zip");
+/// assert!(io::check_zip(&zip_example).is_ok());
+///
+/// // is not a zip file
+/// let text_example = Path::new("example.txt");
+/// assert!(io::check_zip(&text_example).is_err());
+/// ```
 pub fn check_zip(path: &Path) -> Result<(), String> {
     const ACCEPT_ZIP_EXTS: [&str; 2] = ["zip", "ZIP"];
     match path.extension().and_then(OsStr::to_str) {
