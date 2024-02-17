@@ -12,6 +12,30 @@ pub struct Config<'a> {
 }
 
 impl<'a> Config<'a> {
+    /// Builds an instance of `Config` after parsing CLI inputs
+    ///
+    /// # Arguments
+    ///
+    /// * `parsed_args` - A vector of strings denoting the parsed inputs.
+    /// Expecting the format: [BINARY_NAME, ATOC_PATH, OUTPUT_PATH] (this
+    /// is the result of calling `std::env::args().collect()`)
+    ///
+    /// > Note: the format of `parsed_args` is currently 'awkward' to use. A
+    /// future feature will be to implement `Config::new()` such that use cases
+    /// that don't require a cli can be catered for.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use atoc2gtfs::cli::Config;
+    /// let dummy_parsed_args = vec![
+    ///     "".to_string(),                 // empty dummy binary name (not used)
+    ///     "./tests/data/dummy_empty.zip".to_string(),  // dummy sub-string query
+    ///     "dummy_output.zip".to_string(),    // dummy file path
+    /// ];
+    /// let config = Config::build(&dummy_parsed_args);
+    /// assert!(config.is_ok());
+    /// ```
     pub fn build(parsed_args: &[String]) -> Result<Config, String> {
         const NUM_REQ_ARGS: usize = 2;
         let num_inputted_req_args: usize = parsed_args.len() - 1;
