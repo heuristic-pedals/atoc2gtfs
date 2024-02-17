@@ -40,7 +40,7 @@ All code in this repository is released under an [MIT licence][MIT]. All input d
 [RDG homepage]: https://data.atoc.org/member-area
 [CC eng and wales]: https://creativecommons.org/licenses/by/2.0/uk/legalcode.en-gb
 [ATOC spec]: https://data.atoc.org/sites/all/themes/atoc/files/RSPS5046.pdf
-[MIT]: LICENSE
+[MIT]: https://github.com/heuristic-pedals/atoc2gtfs/blob/main/LICENSE
 [GTFS docs]: https://gtfs.org/schedule/
 [UK2GTFS]: https://itsleeds.github.io/UK2GTFS/
 [ATOCCIF2GTFS]: https://github.com/odileeds/ATOCCIF2GTFS
