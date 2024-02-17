@@ -18,6 +18,21 @@ Other open source ATOC to GTFS conversion tools exist written in a range of prog
 
 `atoc2gtfs` is both a binary and library crate providing an ATOC.CIF to GTFS conversion capability. Usage instructions for the binary crate can be found below. The `atoc2gtfs` library API is described in more details within the documentation.
 
+## Usage
+
+> Note: This crate is not currently hosted on [cartes.io](https://crates.io). Therefore the following instructions require users to clone this repository and build the release binary (say using using `cargo`). All instructions are then relative to the directory's root.
+
+An ATOC.CIF GB rail schedule can be converted to GTFS using the following command with 2 required arguments:
+
+```bash
+./target/release/atoc2gtfs <PATH TO INPUT ATOC> <PATH TO OUTPUS GTFS>
+```
+
+Where:
+
+- `<PATH TO INPUT ATOC>` is the path to the input ATOC.CIF (.zip file).
+- `<PATH TO OUTPUS GTFS>` is the desired output GTFS path (.zip file).
+
 ## License
 
 All code in this repository is released under an [MIT licence][MIT]. All input data sources supplied by the RDG and any dervied GTFS outputs using this code are subject to the [Creative Commons England and Wales Public Licence][CC eng and wales]. This requires users to attribute the orignal data provider (RDG) and this repository.
