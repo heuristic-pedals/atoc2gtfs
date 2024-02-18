@@ -59,8 +59,9 @@ impl<'a> Config<'a> {
             return Err(format!("{:?} is not a file.", input_path));
         }
 
-        utils::io::check_zip(input_path)?;
-        utils::io::check_zip(output_path)?;
+        let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
+        utils::io::check_extension(input_path, &accept_zip_exts)?;
+        utils::io::check_extension(output_path, &accept_zip_exts)?;
 
         Ok(Config {
             input_path,
