@@ -2,14 +2,13 @@
 use std::ffi::OsStr;
 use std::path::Path;
 
-/// Checks if the provded input path is a zip file based on its extension.
+/// Checks if the provded input path has the expected file extension.
 ///
-/// Both `.zip` and `.ZIP` file exentions are considered zip files. Returns a
-/// `Result` enmum as follows:
-/// - `OK(())` when the provided path has a zip file extension.
-/// - `Er()` when no zip file extension is found. This could be due to the path
-/// having no file extension (say a directory) or it is not a zip file (say .txt).
-/// The `Er()` will contain a `String` error message with more details.
+/// Returns a `Result` enmum as follows:
+/// - `OK(())` when the provided path has the expected file extension.
+/// - `Er()` in all other cases. This could be due to the path having no file extension
+/// (say a directory) or it is not a zip file (say .txt). The `Er()` will contain
+/// a `String` error message with more details.
 ///
 /// > Note: this function wraps [`std::path::Path::extension`]. See this method's
 /// documentation for more details.
@@ -17,8 +16,9 @@ use std::path::Path;
 /// # Arguments
 ///
 /// * `path` - Path to input file to test.
+/// * `extensions` - A vector of `&str` types containing valid extensions.
 ///
-/// # Example
+/// # Example (checking for a ZIP archive file)
 /// ```
 /// use atoc2gtfs::utils::io;
 /// use std::path::Path;
