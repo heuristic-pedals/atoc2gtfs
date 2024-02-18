@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial MCA file parsing.
 - Initial MSN file parsing.
 
+## [0.2.1] - 2024-02-18
+
+### Changed
+- Refactored `check_zip()` to `check_extension()` - resolved [#8].
+- Fixed codecov shield link in README - resolved [#3].
+
 ## [0.2.0] - 2024-02-17
 
 ### Added
@@ -31,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Codecov set-up.
 - Added issue and PR templates.
 
-[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/heuristic-pedals/atoc2gtfs/releases/tag/v0.1.0
+
+[#3]: https://github.com/heuristic-pedals/atoc2gtfs/issues/3
+[#8]: https://github.com/heuristic-pedals/atoc2gtfs/issues/8
