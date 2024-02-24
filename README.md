@@ -31,7 +31,7 @@ An ATOC.CIF GB rail schedule can be converted to GTFS using the following comman
 Where:
 
 - `<PATH TO INPUT ATOC>` is the path to the input ATOC.CIF (.zip file).
-- `<PATH TO OUTPUS GTFS>` is the desired output GTFS path (.zip file).
+- `<PATH TO OUTPUT GTFS>` is the desired output GTFS path (.zip file).
 
 ## License
 
