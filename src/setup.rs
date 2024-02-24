@@ -51,6 +51,29 @@ impl<'a> Config<'a> {
 
         Config::new(&parsed_args[1], &parsed_args[2])
     }
+
+    /// Create an instance of `Config`. Used to collect input and output paths, check the
+    /// input exists and is a file, and that both both the input and outpus are zip file.
+    /// Both `.zip` and `.ZIP` are valid extensions.
+    ///
+    /// # Arguments
+    ///
+    /// * `input_path` - Path to the input ATOC zip file to be converted, as a str.
+    /// * `output_path` - Path to user to save the converted GTFS file, as a str.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use atoc2gtfs::setup::Config;
+    /// let input_path = "./tests/data/dummy_empty.zip";
+    /// let output_path = "dummy_output.zip";
+    /// let config = Config::new(&input_path, &output_path);
+    /// assert!(config.is_ok());
+    /// ```
+    /// 
+    /// # See Also
+    ///
+    /// - [Config::build] - Building `Config` by parsing CLI arguments.
     pub fn new(input_path: &'a str, output_path: &'a str) -> Result<Config<'a>, String> {
         let input_path: &Path = Path::new(input_path);
         let output_path: &Path = Path::new(output_path);
