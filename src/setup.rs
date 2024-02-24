@@ -27,7 +27,7 @@ impl<'a> Config<'a> {
     /// # Examples
     ///
     /// ```
-    /// use atoc2gtfs::cli::Config;
+    /// use atoc2gtfs::setup::Config;
     /// let dummy_parsed_args = vec![
     ///     "".to_string(),                 // empty dummy binary name (not used)
     ///     "./tests/data/dummy_empty.zip".to_string(),  // dummy sub-string query
