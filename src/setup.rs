@@ -12,17 +12,15 @@ pub struct Config<'a> {
 }
 
 impl<'a> Config<'a> {
-    /// Builds an instance of `Config` after parsing CLI inputs
+    /// Builds an instance of `Config` after parsing CLI inputs. Used to collect input
+    /// and output paths, check the input exists and is a file, and that both both the
+    /// input and outpus are zip file. Both `.zip` and `.ZIP` are valid extensions.
     ///
     /// # Arguments
     ///
     /// * `parsed_args` - A vector of strings denoting the parsed inputs.
     /// Expecting the format: [BINARY_NAME, ATOC_PATH, OUTPUT_PATH] (this
     /// is the result of calling `std::env::args().collect()`)
-    ///
-    /// > Note: the format of `parsed_args` is currently 'awkward' to use. A
-    /// future feature will be to implement `Config::new()` such that use cases
-    /// that don't require a cli can be catered for.
     ///
     /// # Examples
     ///
@@ -33,10 +31,13 @@ impl<'a> Config<'a> {
     ///     "./tests/data/dummy_empty.zip".to_string(),  // dummy sub-string query
     ///     "dummy_output.zip".to_string(),    // dummy file path
     /// ];
-    /// let config = Config::build(&dummy_parsed_args);
+    /// let config = Config::build_from_cli(&dummy_parsed_args);
     /// assert!(config.is_ok());
     /// ```
-    pub fn build(parsed_args: &[String]) -> Result<Config, String> {
+    /// # See Also
+    ///
+    /// - [Config::new] - Create a `Config` instance by supplying arguments directly.
+    pub fn build_from_cli(parsed_args: &[String]) -> Result<Config, String> {
         const NUM_REQ_ARGS: usize = 2;
         let num_inputted_req_args: usize = parsed_args.len() - 1;
         let req_arg_err_msg: String = format!(
@@ -70,10 +71,10 @@ impl<'a> Config<'a> {
     /// let config = Config::new(&input_path, &output_path);
     /// assert!(config.is_ok());
     /// ```
-    /// 
+    ///
     /// # See Also
     ///
-    /// - [Config::build] - Building `Config` by parsing CLI arguments.
+    /// - [Config::build_from_cli] - Building `Config` by parsing CLI arguments.
     pub fn new(input_path: &'a str, output_path: &'a str) -> Result<Config<'a>, String> {
         let input_path: &Path = Path::new(input_path);
         let output_path: &Path = Path::new(output_path);
@@ -110,7 +111,7 @@ mod tests {
             dummy_input_path.to_string(),
             dummy_output_path.to_string(),
         ];
-        let config = Config::build(&dummy_parsed_args);
+        let config = Config::build_from_cli(&dummy_parsed_args);
         assert!(config.is_ok());
         let config = config.unwrap();
         assert_eq!(
@@ -130,7 +131,7 @@ mod tests {
     #[test]
     fn config_too_many_req_args() {
         let numerous_args = vec!["".to_string(); 4];
-        let config = Config::build(&numerous_args);
+        let config = Config::build_from_cli(&numerous_args);
         // split out assertions to imporve test debug messages
         assert!(config.is_err(), "Too many arguments case was not detected.");
         assert!(
@@ -143,7 +144,7 @@ mod tests {
     #[test]
     fn config_too_few_req_args() {
         let sparse_args = vec!["".to_string(); 2];
-        let config = Config::build(&sparse_args);
+        let config = Config::build_from_cli(&sparse_args);
         // split out assertions to imporve test debug messages
         assert!(config.is_err(), "Too few arguments case was not detected.");
         assert!(
@@ -160,7 +161,7 @@ mod tests {
             "does_not_exist.zip".to_string(),
             "dummy_output.zip".to_string(),
         ];
-        let config = Config::build(&non_exist_input);
+        let config = Config::build_from_cli(&non_exist_input);
         assert!(
             config.is_err(),
             "No error raised when provided non-existent input."
@@ -178,7 +179,7 @@ mod tests {
             "./tests/data/".to_string(),
             "dummy_output.zip".to_string(),
         ];
-        let config = Config::build(&folder_input);
+        let config = Config::build_from_cli(&folder_input);
         assert!(
             config.is_err(),
             "No error raised when provided a folder path as an input."
@@ -196,7 +197,7 @@ mod tests {
             "./tests/data/dummy_empty.txt".to_string(),
             "dummy_output.zip".to_string(),
         ];
-        let config = Config::build(&text_input);
+        let config = Config::build_from_cli(&text_input);
         assert!(
             config.is_err(),
             "No error raised when provided a text file as input."
@@ -210,7 +211,7 @@ mod tests {
             "./tests/data/dummy_empty.zip".to_string(),
             "dummy_output.text".to_string(),
         ];
-        let config = Config::build(&test_output);
+        let config = Config::build_from_cli(&test_output);
         assert!(
             config.is_err(),
             "No error raised when provided a text file as output."
