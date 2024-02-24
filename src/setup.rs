@@ -2,7 +2,6 @@
 use crate::utils;
 use std::cmp::Ordering;
 use std::path::Path;
-use std::process::Output;
 
 /// Capture and collect the runtime configuration
 pub struct Config<'a> {
