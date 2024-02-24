@@ -2,6 +2,7 @@
 use crate::utils;
 use std::cmp::Ordering;
 use std::path::Path;
+use std::process::Output;
 
 /// Capture and collect the runtime configuration
 pub struct Config<'a> {
@@ -51,6 +52,26 @@ impl<'a> Config<'a> {
 
         let input_path: &Path = Path::new(&parsed_args[1]);
         let output_path: &Path = Path::new(&parsed_args[2]);
+
+        if !input_path.exists() {
+            return Err(format!("{:?} does not exist.", input_path));
+        }
+        if !input_path.is_file() {
+            return Err(format!("{:?} is not a file.", input_path));
+        }
+
+        let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
+        utils::io::check_extension(input_path, &accept_zip_exts)?;
+        utils::io::check_extension(output_path, &accept_zip_exts)?;
+
+        Ok(Config {
+            input_path,
+            output_path,
+        })
+    }
+    pub fn new(input_path: &'a str, output_path: &'a str) -> Result<Config<'a>, String> {
+        let input_path: &Path = Path::new(input_path);
+        let output_path: &Path = Path::new(output_path);
 
         if !input_path.exists() {
             return Err(format!("{:?} does not exist.", input_path));
