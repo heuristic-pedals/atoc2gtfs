@@ -7,9 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Public `config::new()` API (improved config build functionality).
 - Initial MCA file parsing.
 - Initial MSN file parsing.
+
+## [0.3.0] - 2024-02-24
+
+### Added
+- Public `Config::new()` API (improved config build functionality). - resolved [#7]
+
+### Changed
+- `Config::build()` refactored to `Config::build_from_cli()` to be more explicit.
+- `cli` module refactored to `setup` to group both `build_from_cli()` and `new()` functions.
+
+### Fixed
+- Typo in README.md
 
 ## [0.2.1] - 2024-02-18
 
@@ -37,10 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Codecov set-up.
 - Added issue and PR templates.
 
-[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/heuristic-pedals/atoc2gtfs/releases/tag/v0.1.0
 
 [#3]: https://github.com/heuristic-pedals/atoc2gtfs/issues/3
 [#8]: https://github.com/heuristic-pedals/atoc2gtfs/issues/8
+[#7]: https://github.com/heuristic-pedals/atoc2gtfs/issues/7
