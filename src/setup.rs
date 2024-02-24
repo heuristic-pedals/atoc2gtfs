@@ -102,7 +102,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn config_build_on_pass() {
+    fn config_build_from_cli_on_pass() {
         let dummy_input_path = "./tests/data/dummy_empty.zip";
         let dummy_output_path = "dummy_output.zip";
 
@@ -129,7 +129,7 @@ mod tests {
     }
 
     #[test]
-    fn config_too_many_req_args() {
+    fn config_build_from_cli_too_many_req_args() {
         let numerous_args = vec!["".to_string(); 4];
         let config = Config::build_from_cli(&numerous_args);
         // split out assertions to imporve test debug messages
@@ -142,7 +142,7 @@ mod tests {
     }
 
     #[test]
-    fn config_too_few_req_args() {
+    fn config_build_from_cli_too_few_req_args() {
         let sparse_args = vec!["".to_string(); 2];
         let config = Config::build_from_cli(&sparse_args);
         // split out assertions to imporve test debug messages
@@ -155,13 +155,30 @@ mod tests {
     }
 
     #[test]
-    fn config_input_does_not_exist() {
-        let non_exist_input = vec![
-            "".to_string(),
-            "does_not_exist.zip".to_string(),
-            "dummy_output.zip".to_string(),
-        ];
-        let config = Config::build_from_cli(&non_exist_input);
+    fn config_new_on_pass() {
+        let dummy_input_path = "./tests/data/dummy_empty.zip";
+        let dummy_output_path = "dummy_output.zip";
+
+        let config = Config::new(&dummy_input_path, &dummy_output_path);
+        assert!(config.is_ok());
+        let config = config.unwrap();
+        assert_eq!(
+            config.input_path.to_str().unwrap(),
+            dummy_input_path,
+            "Unexpected `input_path` value {:?}",
+            config.input_path
+        );
+        assert_eq!(
+            config.output_path.to_str().unwrap(),
+            dummy_output_path,
+            "Unexpected `file_path` value {:?}",
+            config.output_path
+        );
+    }
+
+    #[test]
+    fn config_new_input_does_not_exist() {
+        let config = Config::new("does_not_exist.zip", "dummy_output.zip");
         assert!(
             config.is_err(),
             "No error raised when provided non-existent input."
@@ -173,13 +190,8 @@ mod tests {
     }
 
     #[test]
-    fn config_input_not_a_file() {
-        let folder_input = vec![
-            "".to_string(),
-            "./tests/data/".to_string(),
-            "dummy_output.zip".to_string(),
-        ];
-        let config = Config::build_from_cli(&folder_input);
+    fn config_new_input_not_a_file() {
+        let config = Config::new("./tests/data/", "dummy_output.zip");
         assert!(
             config.is_err(),
             "No error raised when provided a folder path as an input."
@@ -191,13 +203,8 @@ mod tests {
     }
 
     #[test]
-    fn config_input_not_a_zip() {
-        let text_input = vec![
-            "".to_string(),
-            "./tests/data/dummy_empty.txt".to_string(),
-            "dummy_output.zip".to_string(),
-        ];
-        let config = Config::build_from_cli(&text_input);
+    fn config_new_input_not_a_zip() {
+        let config = Config::new("./tests/data/dummy_empty.txt", "dummy_output.zip");
         assert!(
             config.is_err(),
             "No error raised when provided a text file as input."
@@ -205,13 +212,8 @@ mod tests {
     }
 
     #[test]
-    fn config_output_not_a_zip() {
-        let test_output = vec![
-            "".to_string(),
-            "./tests/data/dummy_empty.zip".to_string(),
-            "dummy_output.text".to_string(),
-        ];
-        let config = Config::build_from_cli(&test_output);
+    fn config_new_output_not_a_zip() {
+        let config = Config::new(&"./tests/data/dummy_empty.zip", "dummy_output.text");
         assert!(
             config.is_err(),
             "No error raised when provided a text file as output."
