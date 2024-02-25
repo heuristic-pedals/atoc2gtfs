@@ -1,4 +1,5 @@
 //! Handles runtime command line parsing for the binary crate.
+use crate::atoc::AtocError;
 use crate::utils;
 use std::cmp::Ordering;
 use std::error::Error;
@@ -123,11 +124,11 @@ impl<'a> Config<'a> {
 
         // raise an error if expected extensions can't be found
         if !expected_atoc_exts.is_empty() {
-            let msg = format!(
-                "Unable to find expected files with extension(s): {:?}",
-                expected_atoc_exts
-            );
-            return Err(msg.into());
+            let atoc_error = AtocError {
+                code: 1,
+                add_message: format!("{:?}", expected_atoc_exts),
+            };
+            return Err(atoc_error.into());
         }
 
         Ok(())
@@ -254,6 +255,28 @@ mod tests {
         assert!(
             config.is_err(),
             "No error raised when provided a text file as output."
+        );
+    }
+
+    #[test]
+    fn unzip_atoc_and_check_on_pass() {
+        let config = Config::new("./tests/data/empty_atoc.zip", "output.zip").unwrap();
+        let result = Config::unzip_atoc_and_check(config);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn unzip_atoc_and_check_no_atoc_files() {
+        let config = Config::new("./tests/data/dummy_empty.zip", "output.zip").unwrap();
+        let result = Config::unzip_atoc_and_check(config);
+        assert!(
+            result.is_err(),
+            "No error raised when unzipping ATOC with only a txt file inside."
+        );
+        assert!(
+            result.is_err_and(|err| format!("{}", err)
+                .contains("AtocError code 1: ATOC input does not contain expected file type(s):")),
+            "Unexpected error message unzipping ATOC with only a txt file inside."
         );
     }
 }
