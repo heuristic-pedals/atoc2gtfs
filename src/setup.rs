@@ -104,11 +104,11 @@ impl<'a> Config<'a> {
         const EXPECPTED_ATOC_EXTS: [&str; 2] = ["mca", "msn"];
         let mut expected_atoc_exts = EXPECPTED_ATOC_EXTS
             .iter()
-            .map(|ext| OsStr::new(ext))
+            .map(OsStr::new)
             .collect::<Vec<&OsStr>>();
 
         // open the zipped ATOC.CIF file for reading.
-        let file = File::open(&config.input_path)?;
+        let file = File::open(config.input_path)?;
         let mut archive = ZipArchive::new(file)?;
 
         // Iterate through all the files in the ZIP archive.
