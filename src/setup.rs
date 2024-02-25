@@ -1,7 +1,11 @@
 //! Handles runtime command line parsing for the binary crate.
 use crate::utils;
 use std::cmp::Ordering;
+use std::error::Error;
+use std::ffi::OsStr;
+use std::fs::File;
 use std::path::Path;
+use zip::ZipArchive;
 
 /// Capture and collect the runtime configuration
 pub struct Config<'a> {
@@ -94,6 +98,39 @@ impl<'a> Config<'a> {
             input_path,
             output_path,
         })
+    }
+    pub fn unzip_atoc_and_check(config: Config) -> Result<(), Box<dyn Error>> {
+        const EXPECPTED_ATOC_EXTS: [&str; 2] = ["mca", "msn"];
+        let mut expected_atoc_exts = EXPECPTED_ATOC_EXTS
+            .iter()
+            .map(|ext| OsStr::new(ext))
+            .collect::<Vec<&OsStr>>();
+
+        // open the zipped ATOC.CIF file for reading.
+        let file = File::open(&config.input_path)?;
+        let mut archive = ZipArchive::new(file)?;
+
+        // Iterate through all the files in the ZIP archive.
+        for i in 0..archive.len() {
+            let file = archive.by_index(i)?;
+            let extension = Path::new(file.name()).extension();
+            if let Some(ext) = extension {
+                if expected_atoc_exts.contains(&ext) {
+                    expected_atoc_exts.retain(|e| *e != ext);
+                }
+            }
+        }
+
+        // raise an error if expected extensions can't be found
+        if !expected_atoc_exts.is_empty() {
+            let msg = format!(
+                "Unable to find expected files with extension(s): {:?}",
+                expected_atoc_exts
+            );
+            return Err(msg.into());
+        }
+
+        Ok(())
     }
 }
 
