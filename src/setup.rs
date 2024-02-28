@@ -33,8 +33,8 @@ impl<'a> Config<'a> {
     /// use atoc2gtfs::setup::Config;
     /// let dummy_parsed_args = vec![
     ///     "".to_string(),                 // empty dummy binary name (not used)
-    ///     "./tests/data/dummy_empty.zip".to_string(),  // dummy sub-string query
-    ///     "dummy_output.zip".to_string(),    // dummy file path
+    ///     "./tests/data/dummy_atoc.zip".to_string(),  // dummy zipped atoc file
+    ///     "dummy_output.zip".to_string(),    // dummy output file path
     /// ];
     /// let config = Config::build_from_cli(&dummy_parsed_args);
     /// assert!(config.is_ok());
@@ -42,7 +42,7 @@ impl<'a> Config<'a> {
     /// # See Also
     ///
     /// - [Config::new] - Create a `Config` instance by supplying arguments directly.
-    pub fn build_from_cli(parsed_args: &[String]) -> Result<Config, String> {
+    pub fn build_from_cli(parsed_args: &[String]) -> Result<Config, Box<dyn Error>> {
         const NUM_REQ_ARGS: usize = 2;
         let num_inputted_req_args: usize = parsed_args.len() - 1;
         let req_arg_err_msg: String = format!(
@@ -50,8 +50,8 @@ impl<'a> Config<'a> {
             NUM_REQ_ARGS, num_inputted_req_args
         );
         match num_inputted_req_args.cmp(&NUM_REQ_ARGS) {
-            Ordering::Greater => return Err("Too many".to_string() + &req_arg_err_msg),
-            Ordering::Less => return Err("Too few".to_string() + &req_arg_err_msg),
+            Ordering::Greater => return Err(("Too many".to_string() + &req_arg_err_msg).into()),
+            Ordering::Less => return Err(("Too few".to_string() + &req_arg_err_msg).into()),
             Ordering::Equal => (),
         }
 
@@ -71,36 +71,38 @@ impl<'a> Config<'a> {
     ///
     /// ```
     /// use atoc2gtfs::setup::Config;
-    /// let input_path = "./tests/data/dummy_empty.zip";
+    /// let input_path = "./tests/data/dummy_atoc.zip";
     /// let output_path = "dummy_output.zip";
-    /// let config = Config::new(&input_path, &output_path);
+    /// let config = Config::new(input_path, output_path);
     /// assert!(config.is_ok());
     /// ```
     ///
     /// # See Also
     ///
     /// - [Config::build_from_cli] - Building `Config` by parsing CLI arguments.
-    pub fn new(input_path: &'a str, output_path: &'a str) -> Result<Config<'a>, String> {
+    pub fn new(input_path: &'a str, output_path: &'a str) -> Result<Config<'a>, Box<dyn Error>> {
         let input_path: &Path = Path::new(input_path);
         let output_path: &Path = Path::new(output_path);
 
         if !input_path.exists() {
-            return Err(format!("{:?} does not exist.", input_path));
+            return Err(format!("{:?} does not exist.", input_path).into());
         }
         if !input_path.is_file() {
-            return Err(format!("{:?} is not a file.", input_path));
+            return Err(format!("{:?} is not a file.", input_path).into());
         }
 
         let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
         utils::io::check_extension(input_path, &accept_zip_exts)?;
         utils::io::check_extension(output_path, &accept_zip_exts)?;
 
+        Config::read_atoc_and_check(input_path)?;
+
         Ok(Config {
             input_path,
             output_path,
         })
     }
-    pub fn read_atoc_and_check(config: Config) -> Result<ZipArchive<File>, Box<dyn Error>> {
+    fn read_atoc_and_check(input_path: &Path) -> Result<(), Box<dyn Error>> {
         const EXPECPTED_ATOC_EXTS: [&str; 2] = ["mca", "msn"];
         let mut expected_atoc_exts = EXPECPTED_ATOC_EXTS
             .iter()
@@ -108,7 +110,7 @@ impl<'a> Config<'a> {
             .collect::<Vec<&OsStr>>();
 
         // open the zipped ATOC.CIF file for reading.
-        let file = File::open(config.input_path)?;
+        let file = File::open(input_path)?;
         let mut archive = ZipArchive::new(file)?;
 
         // Iterate through all the files in the ZIP archive.
@@ -131,7 +133,7 @@ impl<'a> Config<'a> {
             return Err(atoc_error.into());
         }
 
-        Ok(archive)
+        Ok(())
     }
 }
 
@@ -141,7 +143,7 @@ mod tests {
 
     #[test]
     fn config_build_from_cli_on_pass() {
-        let dummy_input_path = "./tests/data/dummy_empty.zip";
+        let dummy_input_path = "./tests/data/dummy_atoc.zip";
         let dummy_output_path = "dummy_output.zip";
 
         let dummy_parsed_args = vec![
@@ -174,7 +176,9 @@ mod tests {
         assert!(config.is_err(), "Too many arguments case was not detected.");
         assert!(
             // check equality since err message not expected to change
-            config.is_err_and(|err| err.contains("Too many required arguments provided")),
+            config.is_err_and(
+                |err| format!("{}", err).contains("Too many required arguments provided")
+            ),
             "Unexpected error message when passing too many arguments."
         );
     }
@@ -187,14 +191,16 @@ mod tests {
         assert!(config.is_err(), "Too few arguments case was not detected.");
         assert!(
             // check equality since err message not expected to change
-            config.is_err_and(|err| err.contains("Too few required arguments provided")),
+            config.is_err_and(
+                |err| format!("{}", err).contains("Too few required arguments provided")
+            ),
             "Unexpected error message when passing too few arguments."
         );
     }
 
     #[test]
     fn config_new_on_pass() {
-        let dummy_input_path = "./tests/data/dummy_empty.zip";
+        let dummy_input_path = "./tests/data/dummy_atoc.zip";
         let dummy_output_path = "dummy_output.zip";
 
         let config = Config::new(dummy_input_path, dummy_output_path);
@@ -222,7 +228,7 @@ mod tests {
             "No error raised when provided non-existent input."
         );
         assert!(
-            config.is_err_and(|err| err.contains("does not exist")),
+            config.is_err_and(|err| format!("{}", err).contains("does not exist")),
             "Unexpected error message when passing a non-existent input."
         );
     }
@@ -235,7 +241,7 @@ mod tests {
             "No error raised when provided a folder path as an input."
         );
         assert!(
-            config.is_err_and(|err| err.contains("is not a file")),
+            config.is_err_and(|err| format!("{}", err).contains("is not a file")),
             "Unexpected error message when passing a folder path as an input."
         );
     }
@@ -260,15 +266,13 @@ mod tests {
 
     #[test]
     fn read_atoc_and_check_on_pass() {
-        let config = Config::new("./tests/data/empty_atoc.zip", "output.zip").unwrap();
-        let result = Config::read_atoc_and_check(config);
+        let result = Config::read_atoc_and_check(Path::new("./tests/data/dummy_atoc.zip"));
         assert!(result.is_ok());
     }
 
     #[test]
     fn read_atoc_and_check_no_atoc_files() {
-        let config = Config::new("./tests/data/dummy_empty.zip", "output.zip").unwrap();
-        let result = Config::read_atoc_and_check(config);
+        let result = Config::read_atoc_and_check(Path::new("./tests/data/dummy_empty.zip"));
         assert!(
             result.is_err(),
             "No error raised when unzipping ATOC with only a txt file inside."

@@ -17,15 +17,13 @@ use std::error::Error;
 /// # Example
 /// ```
 /// use atoc2gtfs::{setup::Config, run};
-/// let input_atoc_path = "./tests/data/empty_atoc.zip";                     // input ATOC.CIF path
+/// let input_atoc_path = "./tests/data/dummy_atoc.zip";                     // input ATOC.CIF path
 /// let output_gtfs_path = "./data/output_gtfs.zip";                         // output GTFS path
 /// let config = Config::new(&input_atoc_path, &output_gtfs_path).unwrap();  // setup a new Config
 /// assert!(run(config).is_ok());                                            // run the pipeline
 /// ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     println!("Converting {:?} to GTFS...", config.input_path);
-
-    Config::read_atoc_and_check(config)?;
 
     Ok(())
 }
