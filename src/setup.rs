@@ -113,8 +113,8 @@ impl<'a> Config<'a> {
 
         // Iterate through all the files in the ZIP archive.
         for i in 0..archive.len() {
-            let file = archive.by_index(i)?;
-            let extension = Path::new(file.name()).extension();
+            let zipped_file = archive.by_index(i)?;
+            let extension = Path::new(zipped_file.name()).extension();
             if let Some(ext) = extension {
                 if expected_atoc_exts.contains(&ext) {
                     expected_atoc_exts.retain(|e| *e != ext);
