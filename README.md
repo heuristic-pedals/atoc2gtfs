@@ -25,7 +25,7 @@ Other open source ATOC to GTFS conversion tools exist written in a range of prog
 An ATOC.CIF GB rail schedule can be converted to GTFS using the following command with 2 required arguments:
 
 ```bash
-./target/release/atoc2gtfs <PATH TO INPUT ATOC> <PATH TO OUTPUS GTFS>
+./target/release/atoc2gtfs <PATH TO INPUT ATOC> <PATH TO OUTPUT GTFS>
 ```
 
 Where:
