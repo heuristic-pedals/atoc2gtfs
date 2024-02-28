@@ -25,7 +25,7 @@ use std::error::Error;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     println!("Converting {:?} to GTFS...", config.input_path);
 
-    Config::unzip_atoc_and_check(config)?;
+    Config::read_atoc_and_check(config)?;
 
     Ok(())
 }

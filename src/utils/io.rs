@@ -58,7 +58,7 @@ mod tests {
         ];
         let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
         for dummy_input in dummy_inputs {
-            assert!(check_extension(&dummy_input, &accept_zip_exts).is_ok());
+            assert!(check_extension(dummy_input, &accept_zip_exts).is_ok());
         }
     }
 
@@ -66,7 +66,7 @@ mod tests {
     fn check_extension_not_a_zip() {
         let text_input = Path::new("./tests/data/dummy_empty.txt");
         let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
-        let result = check_extension(&text_input, &accept_zip_exts);
+        let result = check_extension(text_input, &accept_zip_exts);
         assert!(
             result.is_err(),
             "Did not raise error when provided text input."
@@ -82,7 +82,7 @@ mod tests {
     fn check_extension_no_file_extension() {
         let no_file_ext = Path::new("./tests/data/dummy_empty");
         let accept_zip_exts: Vec<&str> = vec!["zip", "ZIP"];
-        let result = check_extension(&no_file_ext, &accept_zip_exts);
+        let result = check_extension(no_file_ext, &accept_zip_exts);
         assert!(
             result.is_err(),
             "Did not raise error when input with no extension was provided."

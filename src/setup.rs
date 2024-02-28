@@ -100,7 +100,7 @@ impl<'a> Config<'a> {
             output_path,
         })
     }
-    pub fn unzip_atoc_and_check(config: Config) -> Result<(), Box<dyn Error>> {
+    pub fn read_atoc_and_check(config: Config) -> Result<ZipArchive<File>, Box<dyn Error>> {
         const EXPECPTED_ATOC_EXTS: [&str; 2] = ["mca", "msn"];
         let mut expected_atoc_exts = EXPECPTED_ATOC_EXTS
             .iter()
@@ -131,7 +131,7 @@ impl<'a> Config<'a> {
             return Err(atoc_error.into());
         }
 
-        Ok(())
+        Ok(archive)
     }
 }
 
@@ -197,7 +197,7 @@ mod tests {
         let dummy_input_path = "./tests/data/dummy_empty.zip";
         let dummy_output_path = "dummy_output.zip";
 
-        let config = Config::new(&dummy_input_path, &dummy_output_path);
+        let config = Config::new(dummy_input_path, dummy_output_path);
         assert!(config.is_ok());
         let config = config.unwrap();
         assert_eq!(
@@ -251,7 +251,7 @@ mod tests {
 
     #[test]
     fn config_new_output_not_a_zip() {
-        let config = Config::new(&"./tests/data/dummy_empty.zip", "dummy_output.text");
+        let config = Config::new("./tests/data/dummy_empty.zip", "dummy_output.text");
         assert!(
             config.is_err(),
             "No error raised when provided a text file as output."
@@ -259,16 +259,16 @@ mod tests {
     }
 
     #[test]
-    fn unzip_atoc_and_check_on_pass() {
+    fn read_atoc_and_check_on_pass() {
         let config = Config::new("./tests/data/empty_atoc.zip", "output.zip").unwrap();
-        let result = Config::unzip_atoc_and_check(config);
+        let result = Config::read_atoc_and_check(config);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn unzip_atoc_and_check_no_atoc_files() {
+    fn read_atoc_and_check_no_atoc_files() {
         let config = Config::new("./tests/data/dummy_empty.zip", "output.zip").unwrap();
-        let result = Config::unzip_atoc_and_check(config);
+        let result = Config::read_atoc_and_check(config);
         assert!(
             result.is_err(),
             "No error raised when unzipping ATOC with only a txt file inside."
