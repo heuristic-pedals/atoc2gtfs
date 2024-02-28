@@ -19,7 +19,8 @@ pub struct Config<'a> {
 impl<'a> Config<'a> {
     /// Builds an instance of `Config` after parsing CLI inputs. Used to collect input
     /// and output paths, check the input exists and is a file, and that both both the
-    /// input and outpus are zip file. Both `.zip` and `.ZIP` are valid extensions.
+    /// input and outpus are zip files. Also checks the required ATOC files are within
+    /// the input zip. Both `.zip` and `.ZIP` are valid extensions.
     ///
     /// # Arguments
     ///
@@ -59,8 +60,9 @@ impl<'a> Config<'a> {
     }
 
     /// Create an instance of `Config`. Used to collect input and output paths, check the
-    /// input exists and is a file, and that both both the input and outpus are zip file.
-    /// Both `.zip` and `.ZIP` are valid extensions.
+    /// input exists and is a file, and that both both the input and outpus are zip files.
+    /// Also checks the required ATOC files are within the input zip. Both `.zip` and `.ZIP` are
+    /// valid extensions.
     ///
     /// # Arguments
     ///
@@ -102,6 +104,7 @@ impl<'a> Config<'a> {
             output_path,
         })
     }
+    // Helper function to check if expected ATOC files are within the input.
     fn read_atoc_and_check(input_path: &Path) -> Result<(), Box<dyn Error>> {
         const EXPECPTED_ATOC_EXTS: [&str; 2] = ["mca", "msn"];
         let mut expected_atoc_exts = EXPECPTED_ATOC_EXTS
