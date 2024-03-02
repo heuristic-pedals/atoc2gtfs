@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - CLI help details using `-h` or `--help` - closes [#13].
+- CLI version display using `-v` or `--version`.
 
 ## [0.4.0] - 2024-02-28
 
