@@ -45,18 +45,25 @@ impl<'a> Config<'a> {
     /// - [Config::new] - Create a `Config` instance by supplying arguments directly.
     pub fn build_from_cli(parsed_args: &[String]) -> Result<Config, Box<dyn Error>> {
         const NUM_REQ_ARGS: usize = 2;
-        let num_inputted_req_args: usize = parsed_args.len() - 1;
+        // strip out optional arguments
+        let parsed_req_args = parsed_args
+            .iter()
+            .filter(|arg| !arg.starts_with('-'))
+            .collect::<Vec<&String>>();
+        // subtract 1 to account for initial not needed 0th element (binary file location)
+        let num_inputted_req_args: usize = parsed_req_args.len() - 1;
         let req_arg_err_msg: String = format!(
             " required arguments provided. Expected {}, got {}.",
             NUM_REQ_ARGS, num_inputted_req_args
         );
+        // handle too few/many arguments cases
         match num_inputted_req_args.cmp(&NUM_REQ_ARGS) {
             Ordering::Greater => return Err(("Too many".to_string() + &req_arg_err_msg).into()),
             Ordering::Less => return Err(("Too few".to_string() + &req_arg_err_msg).into()),
             Ordering::Equal => (),
         }
 
-        Config::new(&parsed_args[1], &parsed_args[2])
+        Config::new(parsed_req_args[1], parsed_req_args[2])
     }
 
     /// Create an instance of `Config`. Used to collect input and output paths, check the
