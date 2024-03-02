@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"atoc2gtfs":[["impl Freeze for <a class=\"struct\" href=\"atoc2gtfs/atoc/struct.AtocError.html\" title=\"struct atoc2gtfs::atoc::AtocError\">AtocError</a>",1,["atoc2gtfs::atoc::AtocError"]],["impl&lt;'a&gt; Freeze for <a class=\"struct\" href=\"atoc2gtfs/setup/struct.Config.html\" title=\"struct atoc2gtfs::setup::Config\">Config</a>&lt;'a&gt;",1,["atoc2gtfs::setup::Config"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
