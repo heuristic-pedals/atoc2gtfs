@@ -12,6 +12,12 @@ fn main() {
         process::exit(0);
     }
 
+    // handle case where version info is requested `atoc2gtfs -v` or `atoc2gtfs --version`
+    if (args.len() == 2) && (args[1] == "-v" || args[1] == "--version") {
+        println!("{}", cli_version_msg());
+        process::exit(0);
+    }
+
     // parse CLI arguments
     let config: Config = Config::build_from_cli(&args).unwrap_or_else(|err| {
         eprintln!("Error parsing arguments: {:?}", err);
@@ -34,6 +40,14 @@ fn cli_help_msg() -> &'static str {
         "    ATOC_INPUT_PATH:\tpath to the input ATOC file (.zip file)\n",
         "    GTFS_OUTPUT_PATH:\tpath to the output GTFS file (.zip file)\n",
     )
+}
+
+// provide version details - use option_env! to handle case where cargo is not used to build
+// advice take from: https://stackoverflow.com/questions/27840394/how-can-a-rust-program-access-meta
+// data-from-its-cargo-package
+fn cli_version_msg() -> &'static str {
+    const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
+    VERSION.unwrap_or("unknown")
 }
 
 #[cfg(test)]
