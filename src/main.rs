@@ -34,9 +34,12 @@ fn main() {
 // provide help/usage information
 fn cli_help_msg() -> &'static str {
     concat!(
-        "ATOC.cif to GTFS conversion tool.\n\n",
-        "Usage: atoc2gtfs [ARGS]...\n\n",
-        "Arguments:\n",
+        "`atoc2gtfs`: an ATOC to GTFS conversion tool.\n\n",
+        "Usage: atoc2gtfs [OPTIONS] [ARGS]...\n",
+        "\nOptions:\n",
+        "    -h:\tdisplay this help message (or --help)\n",
+        "    -v:\tdisplay the version number (or --version)\n",
+        "\nArguments:\n",
         "    ATOC_INPUT_PATH:\tpath to the input ATOC file (.zip file)\n",
         "    GTFS_OUTPUT_PATH:\tpath to the output GTFS file (.zip file)\n",
     )
