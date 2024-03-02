@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial MCA file parsing.
 - Initial MSN file parsing.
 
+## [0.5.0] - 2024-03-02
+
+### Added
+- CLI help details using `-h` or `--help` - closes [#13].
+
 ## [0.4.0] - 2024-02-28
 
 ### Added
@@ -62,7 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Codecov set-up.
 - Added issue and PR templates.
 
-[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/heuristic-pedals/atoc2gtfs/compare/v0.2.0...v0.2.1
@@ -73,3 +79,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#8]: https://github.com/heuristic-pedals/atoc2gtfs/issues/8
 [#7]: https://github.com/heuristic-pedals/atoc2gtfs/issues/7
 [#11]: https://github.com/heuristic-pedals/atoc2gtfs/issues/11
+[#13]: https://github.com/heuristic-pedals/atoc2gtfs/issues/13
