@@ -57,24 +57,25 @@ fn cli_version_msg() -> &'static str {
 mod tests {
     use crate::cli_help_msg;
 
+    // check core parts of help message
     #[test]
     fn cli_help_msg_on_pass() {
         let msg = cli_help_msg();
-        assert!(
-            msg.contains("Usage:"),
-            "Help message does not contain usage instructions"
-        );
-        assert!(
-            msg.contains("Arguments:"),
-            "Help message does not contain Arguments section"
-        );
-        assert!(
-            msg.contains("ATOC_INPUT_PATH:"),
-            "Does not contain ATOC_INPUT_PATH info"
-        );
-        assert!(
-            msg.contains("GTFS_OUTPUT_PATH:"),
-            "Does not contain GTFS_OUTPUT_PATH info"
-        );
+        let checks: [&str; 7] = [
+            "Usage:",
+            "Options:",
+            "-h:",
+            "-v:",
+            "Arguments:",
+            "ATOC_INPUT_PATH:",
+            "GTFS_OUTPUT_PATH:",
+        ];
+        for check in checks {
+            assert!(
+                msg.contains(check),
+                "Help message did not contain '{}'",
+                check
+            );
+        }
     }
 }
