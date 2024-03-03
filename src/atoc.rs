@@ -4,6 +4,7 @@ pub mod msn;
 
 use crate::atoc::msn::{Msn, MsnRecord};
 use crate::setup::Config;
+use std::error::Error;
 use std::{error, fmt};
 
 #[derive(Debug)]
@@ -12,10 +13,10 @@ pub struct Atoc<'a> {
 }
 
 impl<'a> Atoc<'a> {
-    pub fn parse_input(config: Config) -> Atoc {
-        Atoc {
-            msn: Msn::parse(config.input_path),
-        }
+    pub fn parse_input(config: Config) -> Result<Atoc, Box<dyn Error>> {
+        Ok(Atoc {
+            msn: Msn::parse(config.input_path)?,
+        })
     }
 }
 
