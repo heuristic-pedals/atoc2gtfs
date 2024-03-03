@@ -9,6 +9,7 @@ use std::path::Path;
 use zip::ZipArchive;
 
 /// Capture and collect the runtime configuration
+#[derive(Debug)]
 pub struct Config<'a> {
     /// path to the input file
     pub input_path: &'a Path,
