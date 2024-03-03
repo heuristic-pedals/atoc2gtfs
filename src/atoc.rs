@@ -1,6 +1,23 @@
 //! ATOC parsing, decoding, and erorr handling.
 
+pub mod msn;
+
+use crate::atoc::msn::{Msn, MsnRecord};
+use crate::setup::Config;
 use std::{error, fmt};
+
+#[derive(Debug)]
+pub struct Atoc<'a> {
+    pub msn: Vec<MsnRecord<'a>>,
+}
+
+impl<'a> Atoc<'a> {
+    pub fn parse_input(config: Config) -> Atoc {
+        Atoc {
+            msn: Msn::parse(config.input_path),
+        }
+    }
+}
 
 // define an atoc error struct
 pub struct AtocError {

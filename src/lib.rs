@@ -4,6 +4,7 @@ pub mod atoc;
 pub mod setup;
 pub mod utils;
 
+use atoc::Atoc;
 use setup::Config;
 use std::error::Error;
 
@@ -24,6 +25,9 @@ use std::error::Error;
 /// ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     println!("Converting {:?} to GTFS...", config.input_path);
+
+    let atoc = Atoc::parse_input(config);
+    dbg!(atoc);
 
     Ok(())
 }
