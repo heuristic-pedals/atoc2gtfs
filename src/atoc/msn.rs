@@ -40,9 +40,9 @@ impl Msn {
         let mut archive = ZipArchive::new(&file)?;
         let mut msn_file = archive.by_name(msn_fname)?;
 
-        let mut buffer = Vec::new();
-        msn_file.read_to_end(&mut buffer)?;
-        let msn_contents = String::from_utf8(buffer)?;
+        let mut msn_contents = String::new();
+        msn_file.read_to_string(&mut msn_contents)?;
+
         for line in msn_contents.lines() {
             dbg!(line);
         }
